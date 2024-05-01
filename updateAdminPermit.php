@@ -23,7 +23,7 @@ if ($conn->connect_error) {
             echo json_encode(array("error" => "Error updating admin permission", "sql_error" => $conn->error));
         }
     } else {
-        echo json_encode(array("error" => "Missing user_id or isAdmin parameter"));
+        echo json_encode(array("error" => "Missing parameters"));
     }
 }
 
