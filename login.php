@@ -2,7 +2,7 @@
 
 header('Access-Control-Allow-Origin: *');
     
-$conn = new mysqli('localhost', 'root', '', 'bazadanychpraca');
+@include 'connect.php';
 
 if ($conn->connect_error) {
     echo json_encode(array("error" => "Connection error"));

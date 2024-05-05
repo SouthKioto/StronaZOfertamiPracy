@@ -1,4 +1,8 @@
 <?php
+    header('Access-Control-Allow-Origin: *');
+    header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE');
+    header('Access-Control-Allow-Headers: Content-Type');
+
     @include 'connect.php';
 
     $query = 'SELECT * FROM `category`';
@@ -13,6 +17,8 @@
             );
         }
         echo json_encode(array("success" => "Data was successfully fetched", "categoryData" => $categories));
+    } else {
+        echo json_encode(array("error" => "Cannot fetch categories"));
     }
 
     

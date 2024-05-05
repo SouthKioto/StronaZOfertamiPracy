@@ -59,7 +59,7 @@ if($conn->connect_error){
         } else {
             $insertSkillQuery = "INSERT INTO skills (skill_name) VALUES ('$skilll')";
             $conn->query($insertSkillQuery);
-    
+            
             $skills_id = $conn->insert_id;
         }
 
