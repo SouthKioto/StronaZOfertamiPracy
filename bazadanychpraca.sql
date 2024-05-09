@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Maj 04, 2024 at 01:23 AM
--- Wersja serwera: 10.4.28-MariaDB
--- Wersja PHP: 8.2.4
+-- Generation Time: Maj 09, 2024 at 09:25 PM
+-- Wersja serwera: 10.4.32-MariaDB
+-- Wersja PHP: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -49,8 +49,18 @@ INSERT INTO `category` (`category_id`, `category_name`) VALUES
 CREATE TABLE `category_notification` (
   `category_notification_id` int(11) NOT NULL,
   `category_id` int(11) NOT NULL,
-  `notification_id` int(11) NOT NULL
+  `notification_of_work_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `category_notification`
+--
+
+INSERT INTO `category_notification` (`category_notification_id`, `category_id`, `notification_of_work_id`) VALUES
+(1, 2, 8),
+(2, 1, 7),
+(3, 1, 11),
+(4, 2, 11);
 
 -- --------------------------------------------------------
 
@@ -165,7 +175,8 @@ CREATE TABLE `notification_of_work` (
 INSERT INTO `notification_of_work` (`notification_of_work_id`, `notification_title`, `notification_descript`, `work_position`, `job_level`, `contract_type`, `employment_dimensions`, `type_of_work_id`, `salary_range_start`, `salary_range_end`, `working_days`, `working_hours_start`, `working_hours_end`, `date_of_expiry_start`, `date_of_expiry_end`, `responsibilities`, `candidate_requirements`, `employer_offers`, `user_id`, `company_id`) VALUES
 (7, 'Programowanie aplikacji', 'Potrzebuję programisty do zaimplementowania aplikacji', 'Programista', 'Hard', 'Zlecenie', 'Praca', 1, 15000, 20000, 'Pon-Pt', '08:00:00', '22:00:00', '2024-05-01', '2024-05-31', 'Programowanie', 'Kurs js, react, c# ect', 'Duzo pinionzków', 24, 5),
 (8, 'Latanie na mopie', 'Latanie na mopie na chałpie', 'Mop', 'Hard', 'Na wieczność', 'Zapierdalanie', 2, 15, 20, 'Pon-Niedz', '00:00:00', '00:00:00', '2024-05-01', '2024-05-31', 'Latanie na mopie po chałpie', 'Magister najlepiej po jakimś dobrym liceum', 'Ryż i woda', 12, 5),
-(9, 'Latanie na mopie', 'Latanie na mopie na chałpie', 'Mop', 'Hard', 'Na wieczność', 'Zapierdalanie', 2, 15, 20, 'Pon-Niedz', '00:00:00', '00:00:00', '2024-05-01', '2024-05-31', 'Latanie na mopie po chałpie', 'Magister najlepiej po jakimś dobrym liceum', 'Ryż i woda', 12, 5);
+(9, 'Latanie na mopie', 'Latanie na mopie na chałpie', 'Mop', 'Hard', 'Na wieczność', 'Zapierdalanie', 2, 15, 20, 'Pon-Niedz', '00:00:00', '00:00:00', '2024-05-01', '2024-05-31', 'Latanie na mopie po chałpie', 'Magister najlepiej po jakimś dobrym liceum', 'Ryż i woda', 12, 5),
+(11, 'Zaprojektowanie aplikacji React', 'Szukam programisty do zaprojektowania aplikacji napisanej w bibliotece React', '', 'Wysoki', 'Zlecenie', 'Programowanie', 0, 1500, 2000, '', '08:00:00', '16:00:00', '2024-05-05', '2024-05-23', 'Magister', '', '', 24, 6);
 
 -- --------------------------------------------------------
 
@@ -382,7 +393,7 @@ ALTER TABLE `category`
 ALTER TABLE `category_notification`
   ADD PRIMARY KEY (`category_notification_id`),
   ADD KEY `category_id` (`category_id`),
-  ADD KEY `notification_id` (`notification_id`);
+  ADD KEY `notification_of_work_id` (`notification_of_work_id`);
 
 --
 -- Indeksy dla tabeli `company`
@@ -530,7 +541,7 @@ ALTER TABLE `category`
 -- AUTO_INCREMENT for table `category_notification`
 --
 ALTER TABLE `category_notification`
-  MODIFY `category_notification_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `category_notification_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `company`
@@ -566,7 +577,7 @@ ALTER TABLE `links`
 -- AUTO_INCREMENT for table `notification_of_work`
 --
 ALTER TABLE `notification_of_work`
-  MODIFY `notification_of_work_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `notification_of_work_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `residence_place`
@@ -643,7 +654,7 @@ ALTER TABLE `work_experience`
 --
 ALTER TABLE `category_notification`
   ADD CONSTRAINT `category_notification_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `category` (`category_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `category_notification_ibfk_2` FOREIGN KEY (`notification_id`) REFERENCES `notification_of_work` (`notification_of_work_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `category_notification_ibfk_2` FOREIGN KEY (`notification_of_work_id`) REFERENCES `notification_of_work` (`notification_of_work_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `notification_of_work`
