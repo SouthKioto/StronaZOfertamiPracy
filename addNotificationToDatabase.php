@@ -24,7 +24,7 @@
     $userId = $_POST['userId'];
     $category_list = json_decode($_POST['category_list'], true);
 
-    print_r($_POST['category_list']);
+    echo $_POST['category_list'];
 
     if (!is_array($category_list) || empty($category_list)) {
         echo json_encode(array('error' => 'No categories selected'));
@@ -58,4 +58,4 @@
         echo json_encode(array('errorAddedNotification' => 'Failed to add notification to database'));
     }
 
-?>
+
