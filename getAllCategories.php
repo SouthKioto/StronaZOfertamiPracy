@@ -20,9 +20,5 @@
     } else {
         echo json_encode(array("error" => "Cannot fetch categories"));
     }
-
     
-
     $conn->close();    
-
-?>

@@ -16,8 +16,9 @@
                 'company_id' => $row['company_id'],
                 'company_name' => $row['company_name'],
                 'company_address' => $row['company_address'],
-                'company_location' => $row['company_location'],
-                'about_company' => $row['about_company']
+                'lat' => $row['lat'],
+                'lng' => $row['lat'],
+                'about_company' => $row['about_company'],
             );
         }
         echo json_encode(array("success" => "Data was successfully fetched", "companyData" => $companies));
@@ -25,4 +26,3 @@
 
     $conn->close();
 
-?>

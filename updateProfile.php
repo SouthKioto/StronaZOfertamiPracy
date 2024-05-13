@@ -15,7 +15,7 @@ if($conn->connect_error){
     $email = mysqli_real_escape_string($conn, $_POST['email']);
     $birth_date = mysqli_real_escape_string($conn, $_POST['birth_date']);
     $phone = mysqli_real_escape_string($conn, $_POST['phone']);
-    $country = mysqli_real_escape_string($conn, $_POST['country']);
+    //$country = mysqli_real_escape_string($conn, $_POST['country']);
     $position = mysqli_real_escape_string($conn, $_POST['position']);
     $positionDescr = mysqli_real_escape_string($conn, $_POST['positionDescr']);
     $career_summary = mysqli_real_escape_string($conn, $_POST['career_summary']);
@@ -67,6 +67,6 @@ if($conn->connect_error){
         $conn->query($insertUserSkillQuery);
     }
 
-    
+    $conn->close();    
 }
-?>
+
