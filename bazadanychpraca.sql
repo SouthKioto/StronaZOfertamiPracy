@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Maj 09, 2024 at 09:25 PM
+-- Generation Time: Maj 13, 2024 at 12:03 AM
 -- Wersja serwera: 10.4.32-MariaDB
 -- Wersja PHP: 8.2.12
 
@@ -38,7 +38,9 @@ CREATE TABLE `category` (
 
 INSERT INTO `category` (`category_id`, `category_name`) VALUES
 (1, 'Programowanie'),
-(2, 'BlackHumansSlavery');
+(2, 'BlackHumansSlavery'),
+(3, 'Sprzątanie'),
+(4, 'Rachunkowość');
 
 -- --------------------------------------------------------
 
@@ -60,7 +62,14 @@ INSERT INTO `category_notification` (`category_notification_id`, `category_id`, 
 (1, 2, 8),
 (2, 1, 7),
 (3, 1, 11),
-(4, 2, 11);
+(4, 2, 11),
+(13, 1, 18),
+(14, 2, 18),
+(15, 1, 19),
+(16, 2, 19),
+(17, 1, 20),
+(18, 2, 20),
+(19, 1, 9);
 
 -- --------------------------------------------------------
 
@@ -72,7 +81,8 @@ CREATE TABLE `company` (
   `company_id` int(11) NOT NULL,
   `company_name` text NOT NULL,
   `company_address` text NOT NULL,
-  `company_location` text NOT NULL,
+  `lat` float NOT NULL,
+  `lng` float NOT NULL,
   `about_company` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_polish_ci;
 
@@ -80,10 +90,12 @@ CREATE TABLE `company` (
 -- Dumping data for table `company`
 --
 
-INSERT INTO `company` (`company_id`, `company_name`, `company_address`, `company_location`, `about_company`) VALUES
-(5, 'Apple', 'Krakowska 11', 'Krakow, Poland', 'Fajnie, dobrze i wspaniale'),
-(6, 'Mop my Life', 'ul Jana Pawła Wielokolorowego', 'Krakow', 'Zatrudniasz się = jezdzisz na mopie'),
-(7, 'Huawei', 'huj wie', 'Krakow', 'Fajnie');
+INSERT INTO `company` (`company_id`, `company_name`, `company_address`, `lat`, `lng`, `about_company`) VALUES
+(5, 'Apple', 'Krakowska 11', 0, 0, 'Fajnie, dobrze i wspaniale'),
+(6, 'Mop my Life', 'ul Jana Pawła Wielokolorowego', 0, 0, 'Zatrudniasz się = jezdzisz na mopie'),
+(7, 'Huawei', 'huj wie', 0, 0, 'Fajnie'),
+(12, 'Urząd Gminy Tymbark', 'Tymbark 49', 49.7291, 20.3244, 'Urząd Gminy Tymbark. Niezawodny :)'),
+(13, 'Zamek Wawelski', 'Wawel 4, 31-003 Kraków', 50.0545, 19.9371, 'Światowy Zabytek Kulturowy');
 
 -- --------------------------------------------------------
 
@@ -153,7 +165,6 @@ CREATE TABLE `notification_of_work` (
   `job_level` text NOT NULL,
   `contract_type` text NOT NULL,
   `employment_dimensions` text NOT NULL,
-  `type_of_work_id` int(11) NOT NULL,
   `salary_range_start` decimal(11,0) NOT NULL,
   `salary_range_end` decimal(11,0) NOT NULL,
   `working_days` text NOT NULL,
@@ -172,11 +183,14 @@ CREATE TABLE `notification_of_work` (
 -- Dumping data for table `notification_of_work`
 --
 
-INSERT INTO `notification_of_work` (`notification_of_work_id`, `notification_title`, `notification_descript`, `work_position`, `job_level`, `contract_type`, `employment_dimensions`, `type_of_work_id`, `salary_range_start`, `salary_range_end`, `working_days`, `working_hours_start`, `working_hours_end`, `date_of_expiry_start`, `date_of_expiry_end`, `responsibilities`, `candidate_requirements`, `employer_offers`, `user_id`, `company_id`) VALUES
-(7, 'Programowanie aplikacji', 'Potrzebuję programisty do zaimplementowania aplikacji', 'Programista', 'Hard', 'Zlecenie', 'Praca', 1, 15000, 20000, 'Pon-Pt', '08:00:00', '22:00:00', '2024-05-01', '2024-05-31', 'Programowanie', 'Kurs js, react, c# ect', 'Duzo pinionzków', 24, 5),
-(8, 'Latanie na mopie', 'Latanie na mopie na chałpie', 'Mop', 'Hard', 'Na wieczność', 'Zapierdalanie', 2, 15, 20, 'Pon-Niedz', '00:00:00', '00:00:00', '2024-05-01', '2024-05-31', 'Latanie na mopie po chałpie', 'Magister najlepiej po jakimś dobrym liceum', 'Ryż i woda', 12, 5),
-(9, 'Latanie na mopie', 'Latanie na mopie na chałpie', 'Mop', 'Hard', 'Na wieczność', 'Zapierdalanie', 2, 15, 20, 'Pon-Niedz', '00:00:00', '00:00:00', '2024-05-01', '2024-05-31', 'Latanie na mopie po chałpie', 'Magister najlepiej po jakimś dobrym liceum', 'Ryż i woda', 12, 5),
-(11, 'Zaprojektowanie aplikacji React', 'Szukam programisty do zaprojektowania aplikacji napisanej w bibliotece React', '', 'Wysoki', 'Zlecenie', 'Programowanie', 0, 1500, 2000, '', '08:00:00', '16:00:00', '2024-05-05', '2024-05-23', 'Magister', '', '', 24, 6);
+INSERT INTO `notification_of_work` (`notification_of_work_id`, `notification_title`, `notification_descript`, `work_position`, `job_level`, `contract_type`, `employment_dimensions`, `salary_range_start`, `salary_range_end`, `working_days`, `working_hours_start`, `working_hours_end`, `date_of_expiry_start`, `date_of_expiry_end`, `responsibilities`, `candidate_requirements`, `employer_offers`, `user_id`, `company_id`) VALUES
+(7, 'Programowanie aplikacji', 'Potrzebuję programisty do zaimplementowania aplikacji', 'Programista', 'Hard', 'Zlecenie', 'Praca', 15000, 20000, 'Pon-Pt', '08:00:00', '22:00:00', '2024-05-01', '2024-05-31', 'Programowanie', 'Kurs js, react, c# ect', 'Duzo pinionzków', 24, 5),
+(8, 'Latanie na mopie', 'Latanie na mopie na chałpie', 'Mop', 'Hard', 'Na wieczność', 'Zapierdalanie', 15, 20, 'Pon-Niedz', '00:00:00', '00:00:00', '2024-05-01', '2024-05-31', 'Latanie na mopie po chałpie', 'Magister najlepiej po jakimś dobrym liceum', 'Ryż i woda', 12, 5),
+(9, 'Latanie na mopie', 'Latanie na mopie na chałpie', 'Mop', 'Hard', 'Na wieczność', 'Zapierdalanie', 15, 20, 'Pon-Niedz', '00:00:00', '00:00:00', '2024-05-01', '2024-05-31', 'Latanie na mopie po chałpie', 'Magister najlepiej po jakimś dobrym liceum', 'Ryż i woda', 12, 5),
+(11, 'Zaprojektowanie aplikacji React', 'Szukam programisty do zaprojektowania aplikacji napisanej w bibliotece React', '', 'Wysoki', 'Zlecenie', 'Programowanie', 1500, 2000, '', '08:00:00', '16:00:00', '2024-05-05', '2024-05-23', 'Magister', '', '', 24, 6),
+(18, 'Poszukujemy informatyka', 'Poszukujemy informatyka do zarządzania serwerownią oraz sprzętami komputerowymi w urzędzie gminy Tymbark', 'Informatyk', 'Wysoki', 'Zajebisty', 'Naprawa oraz konserwacja sprzętu komputerowego', 2500, 4000, '', '08:00:00', '15:00:00', '2024-05-11', '2024-05-23', 'Duże', 'Tytuł magister/inżynier najlepiej młody', 'Herbata, kawa, segz', 24, 12),
+(19, 'Poszukujemy full-stack programisty', 'Poszukujemy full-stack programisty', 'Programista', 'Wysoki', 'ZAJEBISTY', 'Programowanie', 2500, 5000, '', '06:00:00', '15:00:00', '2024-05-11', '2024-05-31', 'Tytuł magister/inżynier', 'Tytuł magister/inżynier', 'SEGZ', 24, 5),
+(20, 'Poszukujemy programisty C#', 'Poszukujemy programisty C#', 'Programista', 'Wysoki', 'ZAJEBISTY', 'Programowanie', 2500, 5000, '', '06:00:00', '15:00:00', '2024-05-11', '2024-05-31', 'Tytuł magister/inżynier', 'Tytuł magister/inżynier', 'SEGZ', 24, 7);
 
 -- --------------------------------------------------------
 
@@ -227,6 +241,40 @@ CREATE TABLE `type_of_work` (
   `type_of_work_type` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_polish_ci;
 
+--
+-- Dumping data for table `type_of_work`
+--
+
+INSERT INTO `type_of_work` (`type_of_work_id`, `type_of_work_type`) VALUES
+(1, 'Zdalna'),
+(2, 'Stacjonarna'),
+(3, 'Hybrydowa');
+
+-- --------------------------------------------------------
+
+--
+-- Struktura tabeli dla tabeli `type_of_work_notification_of_work`
+--
+
+CREATE TABLE `type_of_work_notification_of_work` (
+  `type_of_work_notification_of_work_id` int(11) NOT NULL,
+  `type_of_work_id` int(11) NOT NULL,
+  `notification_of_work_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `type_of_work_notification_of_work`
+--
+
+INSERT INTO `type_of_work_notification_of_work` (`type_of_work_notification_of_work_id`, `type_of_work_id`, `notification_of_work_id`) VALUES
+(1, 1, 18),
+(2, 2, 18),
+(3, 3, 18),
+(4, 1, 19),
+(5, 3, 19),
+(6, 3, 20),
+(7, 1, 20);
+
 -- --------------------------------------------------------
 
 --
@@ -254,8 +302,8 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`user_id`, `name`, `surname`, `birth_date`, `email`, `tel_number`, `prof_image`, `curr_position`, `curr_position_description`, `career_summary`, `password_hash`, `isAdmin`) VALUES
 (12, 'Jan', 'Kowalski', '2024-03-10', 'jkowalski@gmail.com', '123123123', '', 'Kasjer', 'kasjer', 'nom pracomwnik wózka widłowego', '$2y$10$U3A6l.S4zFL3fVTj4MyxPusHIk9VxMGUxyYRi85U2AIiSgKgUvgEy', 0),
-(19, 'admin', 'admin', '0000-00-00', 'admin@gmail.com', '', '', '', '', '', '$2y$10$aPgkJqkIlwax72ooDnScduoCkkwohuFGc4D7y6LaN0EkyoPxRHyF.', 0),
-(24, 'Bartłomiej', 'Bolisęga', '2024-02-29', 'bbolisega@gmail.com', '123123123', '', 'Programista', 'Jestem wolnym agentem który przyjmuje zlecenia na aplikacje webowe, desktopowe, mobilne', 'Wolny agent nie posiadam podsumowania zawodowego', '$2y$10$n7iBqAhz6zvSkbtQAfHuNOzK8Hkh4MMNorVlfoSBHJlSEBw32IuIO', 1);
+(19, 'admin', 'admin', '0000-00-00', 'admin@gmail.com', '', '', '', '', '', '$2y$10$aPgkJqkIlwax72ooDnScduoCkkwohuFGc4D7y6LaN0EkyoPxRHyF.', 1),
+(24, 'Bartłomiej', 'Bolisęga', '2024-02-29', 'bbolisega@gmail.com', '123123123', '', 'Programista', 'Jestem wolnym agentem który przyjmuje zlecenia na aplikacje webowe, desktopowe, mobilne', 'Wolny agent nie posiadam podsumowania zawodowego ok', '$2y$10$n7iBqAhz6zvSkbtQAfHuNOzK8Hkh4MMNorVlfoSBHJlSEBw32IuIO', 1);
 
 -- --------------------------------------------------------
 
@@ -365,6 +413,56 @@ CREATE TABLE `user_workexperience` (
 -- --------------------------------------------------------
 
 --
+-- Struktura tabeli dla tabeli `working_days`
+--
+
+CREATE TABLE `working_days` (
+  `working_day_id` int(11) NOT NULL,
+  `day_name` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `working_days`
+--
+
+INSERT INTO `working_days` (`working_day_id`, `day_name`) VALUES
+(1, 'Poniedziałek'),
+(2, 'Wtorek'),
+(3, 'Środa'),
+(4, 'Czwartek'),
+(5, 'Piątek'),
+(6, 'Sobota'),
+(7, 'Niedziela');
+
+-- --------------------------------------------------------
+
+--
+-- Struktura tabeli dla tabeli `working_days_notification_of_work`
+--
+
+CREATE TABLE `working_days_notification_of_work` (
+  `working_days_notification_of_work_id` int(11) NOT NULL,
+  `working_day_id` int(11) NOT NULL,
+  `notification_of_work_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `working_days_notification_of_work`
+--
+
+INSERT INTO `working_days_notification_of_work` (`working_days_notification_of_work_id`, `working_day_id`, `notification_of_work_id`) VALUES
+(1, 1, 19),
+(2, 3, 19),
+(3, 5, 19),
+(4, 7, 19),
+(5, 1, 20),
+(6, 3, 20),
+(7, 5, 20),
+(8, 7, 20);
+
+-- --------------------------------------------------------
+
+--
 -- Struktura tabeli dla tabeli `work_experience`
 --
 
@@ -430,7 +528,6 @@ ALTER TABLE `links`
 --
 ALTER TABLE `notification_of_work`
   ADD PRIMARY KEY (`notification_of_work_id`),
-  ADD KEY `type_of_work` (`type_of_work_id`),
   ADD KEY `user_id` (`user_id`),
   ADD KEY `company_id` (`company_id`);
 
@@ -451,6 +548,14 @@ ALTER TABLE `skills`
 --
 ALTER TABLE `type_of_work`
   ADD PRIMARY KEY (`type_of_work_id`);
+
+--
+-- Indeksy dla tabeli `type_of_work_notification_of_work`
+--
+ALTER TABLE `type_of_work_notification_of_work`
+  ADD PRIMARY KEY (`type_of_work_notification_of_work_id`),
+  ADD KEY `type_of_work_id` (`type_of_work_id`),
+  ADD KEY `notification_of_work_id` (`notification_of_work_id`);
 
 --
 -- Indeksy dla tabeli `users`
@@ -521,6 +626,18 @@ ALTER TABLE `user_workexperience`
   ADD KEY `work_experience_id` (`work_experience_id`);
 
 --
+-- Indeksy dla tabeli `working_days`
+--
+ALTER TABLE `working_days`
+  ADD PRIMARY KEY (`working_day_id`);
+
+--
+-- Indeksy dla tabeli `working_days_notification_of_work`
+--
+ALTER TABLE `working_days_notification_of_work`
+  ADD PRIMARY KEY (`working_days_notification_of_work_id`);
+
+--
 -- Indeksy dla tabeli `work_experience`
 --
 ALTER TABLE `work_experience`
@@ -535,19 +652,19 @@ ALTER TABLE `work_experience`
 -- AUTO_INCREMENT for table `category`
 --
 ALTER TABLE `category`
-  MODIFY `category_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `category_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `category_notification`
 --
 ALTER TABLE `category_notification`
-  MODIFY `category_notification_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `category_notification_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT for table `company`
 --
 ALTER TABLE `company`
-  MODIFY `company_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `company_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `courses`
@@ -577,7 +694,7 @@ ALTER TABLE `links`
 -- AUTO_INCREMENT for table `notification_of_work`
 --
 ALTER TABLE `notification_of_work`
-  MODIFY `notification_of_work_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `notification_of_work_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT for table `residence_place`
@@ -595,7 +712,13 @@ ALTER TABLE `skills`
 -- AUTO_INCREMENT for table `type_of_work`
 --
 ALTER TABLE `type_of_work`
-  MODIFY `type_of_work_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `type_of_work_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `type_of_work_notification_of_work`
+--
+ALTER TABLE `type_of_work_notification_of_work`
+  MODIFY `type_of_work_notification_of_work_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `users`
@@ -640,6 +763,18 @@ ALTER TABLE `user_skills`
   MODIFY `user_skills_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
+-- AUTO_INCREMENT for table `working_days`
+--
+ALTER TABLE `working_days`
+  MODIFY `working_day_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+--
+-- AUTO_INCREMENT for table `working_days_notification_of_work`
+--
+ALTER TABLE `working_days_notification_of_work`
+  MODIFY `working_days_notification_of_work_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
 -- AUTO_INCREMENT for table `work_experience`
 --
 ALTER TABLE `work_experience`
@@ -662,6 +797,13 @@ ALTER TABLE `category_notification`
 ALTER TABLE `notification_of_work`
   ADD CONSTRAINT `notification_of_work_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `notification_of_work_ibfk_4` FOREIGN KEY (`company_id`) REFERENCES `company` (`company_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `type_of_work_notification_of_work`
+--
+ALTER TABLE `type_of_work_notification_of_work`
+  ADD CONSTRAINT `type_of_work_notification_of_work_ibfk_1` FOREIGN KEY (`type_of_work_id`) REFERENCES `type_of_work` (`type_of_work_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `type_of_work_notification_of_work_ibfk_2` FOREIGN KEY (`notification_of_work_id`) REFERENCES `notification_of_work` (`notification_of_work_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `user_company`

@@ -46,7 +46,7 @@
         }
         echo json_encode(array('status' => 'success', 'message' => 'Data was fetched successfully', 'filteredData' => $notification_with_filters));
     } else {
-        echo json_encode(array('status' => 'error', 'message' => 'Brak wyników wyszukiwania.', 'filteredData' => []));
+        echo json_encode(array('status' => 'NoData', 'message' => 'Brak wyników wyszukiwania.', 'filteredData' => []));
     }
 
     $stmt->close();
