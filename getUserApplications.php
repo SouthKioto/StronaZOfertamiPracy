@@ -8,9 +8,9 @@
 
     $user_id = $_POST['user_id'];
 
-    $query = "SELECT user_aplication_id, notification_of_work_id, notification_title, date FROM user_aplication JOIN(notification_of_work) USING(notification_of_work_id) WHERE user_aplication.user_id = '$user_id'";
-
+    $query = "SELECT user_aplication_id, notification_of_work_id, notification_title, data FROM user_aplication JOIN(notification_of_work) USING(notification_of_work_id) WHERE user_aplication.user_id = '$user_id'";
     $result = $conn->query($query); 
+
 
     if($result->num_rows > 0){
         $aplicationsData = array();
@@ -19,7 +19,7 @@
                 "user_aplication_id" => $row["user_aplication_id"],
                 "notification_title" => $row["notification_title"],
                 "notification_of_work_id" => $row["notification_of_work_id"],
-                "date" => $row["date"]
+                "date" => $row["data"]
             );
         }
 

@@ -6,6 +6,7 @@
     @include 'connect.php';
 
     $user_id = $_POST['user_id'];
+
     if(empty($user_id)) {
         echo json_encode(array("error" => "Category not provided"));
         exit();
@@ -17,11 +18,21 @@
     } else {
         $query = "SELECT * FROM `notification_of_work` WHERE user_id = '$user_id'";
         $results = $conn->query($query);
-
-        if($results->num_rows > 0) {
+        
+        if ($results->num_rows > 0) {
             $user_notification = array();
             
-            while($row = $results->fetch_assoc()) {
+            while ($row = $results->fetch_assoc()) {
+                $queryCountUsers = "SELECT COUNT(user_id) AS usersCount FROM `user_aplication` WHERE notification_of_work_id = '{$row['notification_of_work_id']}'";
+                $resultCountUsers = $conn->query($queryCountUsers);
+                
+                if ($resultCountUsers) {
+                    $countRow = $resultCountUsers->fetch_assoc();
+                    $usersCount = $countRow['usersCount'];
+                } else {
+                    $usersCount = 0;
+                }
+                
                 $user_notification[] = array(
                     'notification_of_work_id' => $row['notification_of_work_id'],
                     'notification_title' => $row['notification_title'],
@@ -41,11 +52,13 @@
                     'candidate_requirements' => $row['candidate_requirements'],
                     'employer_offers' => $row['employer_offers'],
                     'user_id' => $row['user_id'],
+                    'appliedUsers' => $usersCount,
                 );
             }
+            
             echo json_encode(array('status' => 'success', "notificationData" => $user_notification));
         } else {
             echo json_encode(array("status" => "No data found"));
-        }
-        $conn->close();
+        }           
     }
+$conn->close();

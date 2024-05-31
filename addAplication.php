@@ -16,10 +16,13 @@
     if($result->num_rows > 0){
         echo json_encode(array('error' => 'user already applies'));
     } else {
-        $query = "INSERT INTO user_aplication (user_id, notification_of_work_id, date) VALUES ('$user_id', '$not_id', '$dateNow')";
-        $conn->query($query);
-
-        echo json_encode(array('success' => 'application added'));
+        $query = "INSERT INTO user_aplication (user_id, notification_of_work_id, data) VALUES ('$user_id', '$not_id', '$dateNow')";
+        
+        if($conn->query($query)){
+            echo json_encode(array('success' => 'application added'));
+        }
+        //echo json_encode(array('success' => 'application added'));
+        
     }
 
     $conn->close();
