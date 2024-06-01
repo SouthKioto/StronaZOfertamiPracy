@@ -34,11 +34,21 @@ if($conn->connect_error){
                             WHERE user_id = '$user_id';";
         $resultEducation = $conn->query($educationQuery);
 
-        $languageQuery = "";
+        $languageQuery = "SELECT user_id, language_skills.name as language_name, language_skills.level as language_level FROM `users` 
+                            JOIN user_language_skills USING(user_id) 
+                            JOIN language_skills USING(language_skills_id) 
+                            WHERE user_id = '$user_id';";
+        $resultLanguage = $conn->query($languageQuery);
+
+        $linkQuery = "SELECT user_id, link_name, link_source FROM `users` JOIN user_link USING(user_id) JOIN links USING(links_id) WHERE user_id = '$user_id'";
+        $resultLink = $conn->query($linkQuery);
+
 
         $skills = array();
         $workExpArr = array();
         $educationArr = array();
+        $languageArr = array();
+        $linkArr = array();
         $prof_image = null;
 
 
@@ -82,10 +92,30 @@ if($conn->connect_error){
             }
         }
 
+        if($resultLanguage->num_rows > 0){
+            while($row = $resultLanguage->fetch_assoc()) {
+                $languageArr[] = array(
+                    'language_name' => $row['language_name'],
+                    'language_level' => $row['language_level'],
+                );
+            }
+        }
+
+        if($resultLink->num_rows > 0){
+            while($row = $resultLink->fetch_assoc()) {
+                $linkArr[] = array(
+                    'link_name' => $row['link_name'],
+                    'link_source' => $row['link_source'],
+                );
+            }
+        }
+
         echo json_encode(array( 'status' => 'success', 
                                 'skill_data' => $skills, 
                                 'workExpData' => $workExpArr,
                                 'educationData' => $educationArr,
+                                'languageData' => $languageArr,
+                                'linkData' => $linkArr,
                                 'profileImgData' => $prof_image));
         
     }else{
