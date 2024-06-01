@@ -257,7 +257,52 @@ if($conn->connect_error){
     }
 
     // courses section (do dokończenia)
+    $currentCoursesQuery = "SELECT courses_id FROM courses 
+                            JOIN user_course USING(courses_id) 
+                            WHERE user_id = '$user_id';";
 
+    $currentCourseResult = $conn->query($currentCoursesQuery);
+    $currentCourse = [];
+
+    if ($currentCourseResult->num_rows > 0) {
+        while ($row = $currentCourseResult->fetch_assoc()) {
+            $currentCourse[] = $row['courses_id'];
+        }
+    }
+
+    $deleteUserCourseQuery = "DELETE FROM user_course WHERE user_id = $user_id";
+    $conn->query($deleteUserCourseQuery);
+
+    foreach ($courseList as $course) {
+        $courseName = mysqli_real_escape_string($conn, $course["course_name"]);
+        $courseOrganiser = mysqli_real_escape_string($conn, $course["course_organiser"]);
+        $courseStartDate = mysqli_real_escape_string($conn, $course["course_startDate"]);
+        $courseEndDate = isset($course['course_endDate']) ? mysqli_real_escape_string($conn, $course['course_endDate']) : "NULL";
+
+        $checkCourseQuery = "SELECT courses_id FROM `courses` 
+                            WHERE name = '$courseName' 
+                            AND organiser = '$courseOrganiser'
+                            AND course_startDate = '$courseStartDate'
+                            AND course_endDate = '$courseEndDate'";
+        $result = $conn->query($checkCourseQuery);
+    
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            $courseId = $row["courses_id"];
+        } else {
+            $insertCourseQuery = "INSERT INTO courses (name, organiser, course_startDate, course_endDate) 
+                                VALUES ('$courseName', '$courseOrganiser', '$courseStartDate', '$courseEndDate')";
+            if ($conn->query($insertCourseQuery)) {
+                $courseId = $conn->insert_id;
+            } else {
+                echo json_encode(array("error" => 'Course insert error: ' . $conn->error));
+                exit();
+            }
+        }
+
+        $insertUserCourseQuery = "INSERT INTO user_course (user_id, courses_id) VALUES ('$user_id', '$courseId')";
+        $conn->query($insertUserCourseQuery);
+    }
 
     // links section
 
@@ -302,9 +347,6 @@ if($conn->connect_error){
         $insertUserLinkQuery = "INSERT INTO user_link (user_id, links_id) VALUES ('$user_id', '$linkId')";
         $conn->query($insertUserLinkQuery);
     }
-
-
-
     $conn->close();    
 }
 

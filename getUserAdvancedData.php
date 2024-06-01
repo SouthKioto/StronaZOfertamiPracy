@@ -43,12 +43,19 @@ if($conn->connect_error){
         $linkQuery = "SELECT user_id, link_name, link_source FROM `users` JOIN user_link USING(user_id) JOIN links USING(links_id) WHERE user_id = '$user_id'";
         $resultLink = $conn->query($linkQuery);
 
+        $courseQuery = "SELECT user_id, c.name course_name, c.organiser course_organiser, c.course_startDate course_startDate, c.course_endDate course_endDate FROM `users` 
+                        JOIN user_course USING(user_id) 
+                        JOIN courses c USING(courses_id) 
+                        WHERE user_id = '$user_id'";
+
+        $resultCourse = $conn->query($courseQuery);
 
         $skills = array();
         $workExpArr = array();
         $educationArr = array();
         $languageArr = array();
         $linkArr = array();
+        $coursesArr = array();
         $prof_image = null;
 
 
@@ -110,12 +117,24 @@ if($conn->connect_error){
             }
         }
 
+        if($resultCourse->num_rows > 0){
+            while($row = $resultCourse->fetch_assoc()) {
+                $coursesArr[] = array(
+                    'course_name' => $row['course_name'],
+                    'course_organiser' => $row['course_organiser'],
+                    'course_startDate' => $row['course_startDate'],
+                    'course_endDate' => $row['course_endDate'],
+                );
+            }
+        }
+
         echo json_encode(array( 'status' => 'success', 
                                 'skill_data' => $skills, 
                                 'workExpData' => $workExpArr,
                                 'educationData' => $educationArr,
                                 'languageData' => $languageArr,
                                 'linkData' => $linkArr,
+                                'courseData' => $coursesArr,
                                 'profileImgData' => $prof_image));
         
     }else{
