@@ -9,6 +9,7 @@
         $companyName = $_POST['companyName'];
         $companyAddress = $_POST['companyAddress'];
         $companyDescription = $_POST['companyDescription'];
+        $companyLogo = null;
         $lat = $_POST['lat'];
         $lng = $_POST['lng'];
 
@@ -19,8 +20,11 @@
             if($result->num_rows > 0){
                 echo json_encode(array("status"=> "error","message"=> "Firma o tej nazwie i adresie już istnieje"));
             } else {
-                $query = "INSERT INTO `company` (company_name, company_address, lat, lng, about_company) 
-                VALUES('$companyName', '$companyAddress', '$lat', '$lng','$companyDescription')";
+                $companyLogo = file_get_contents($_FILES['companyImg']['tmp_name']);
+                $companyLogo = mysqli_real_escape_string($conn, $companyLogo);
+
+                $query = "INSERT INTO `company` (company_name, company_address, company_logo, lat, lng, about_company) 
+                VALUES('$companyName', '$companyAddress', '$companyLogo', '$lat', '$lng','$companyDescription')";
                 
                 if($conn->query($query)){
                     echo json_encode(array("status"=> "success","message"=> "Twoja firma została dodana"));

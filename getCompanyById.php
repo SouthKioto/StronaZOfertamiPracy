@@ -5,7 +5,9 @@
     
     @include 'connect.php';
 
-    $query = "SELECT * FROM company";
+    $companyId = $_POST['company_id'];
+
+    $query = "SELECT * FROM company WHERE company_id = '$companyId'";
 
     $result = $conn->query($query);
 
